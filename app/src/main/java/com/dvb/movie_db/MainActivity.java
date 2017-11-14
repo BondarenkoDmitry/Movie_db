@@ -13,10 +13,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
-
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -39,14 +37,10 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-
         new GetMovies().execute();
     }
 
-
-
-
-    private class GetMovies extends AsyncTask<Void, Void, Void> {
+    private class GetMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
 
         @Override
         protected void onPreExecute() {
@@ -55,9 +49,8 @@ public class MainActivity extends AppCompatActivity {
                     "Json Data is downloading", Toast.LENGTH_SHORT).show();
         }
 
-
         @Override
-        protected Void doInBackground(Void... arg0) {
+        protected ArrayList<Movie> doInBackground(Object... arg0) {
             HttpHandler sh = new HttpHandler();
 
             String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
@@ -67,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
             final String url = siteUrl + sortBy + apiKey;
 
             String jsonStr = sh.makeServiceCall(url);
+
+            // Local list of movies
+            ArrayList<Movie> popMovies = new ArrayList<>();
 
             Log.e(TAG, "Response from url: " + jsonStr);
             if (jsonStr != null) {
@@ -81,18 +77,9 @@ public class MainActivity extends AppCompatActivity {
                         String title = jsonMovie.getString("title");
                         String poster_path = jsonMovie.getString("poster_path");
 
-
-//                         hash map for single movie
-                        HashMap<String, String> movie = new HashMap<>();
-                        // adding each child node to HashMap key => value
-                        movie.put("title", title);
-                        movie.put("poster_path", poster_path);
-
-//                        // adding movie to movie list
-//                        movieList.add(movie);
+                        // populate the local list in order to be pushed to post execute method
+                        popMovies.add(new Movie(title, poster_path));
                     }
-
-
                 } catch (final JSONException e) {
                     Log.e(TAG, "Json parsing error: " + e.getMessage());
                     runOnUiThread(new Runnable() {
@@ -117,13 +104,17 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
 
-            return null;
+            // Return the local list to UI Thread
+            return popMovies;
         }
 
         @Override
-        protected void onPostExecute(Void result){
+        protected void onPostExecute(ArrayList<Movie> result){
             super.onPostExecute(result);
-            //What shall we do after the data is here?
+
+            // Add the results to the main list and notify the adapter
+            MainActivity.this.mPopMovies.addAll(result);
+            MainActivity.this.mAdapter.notifyDataSetChanged();
         }
 
     }
