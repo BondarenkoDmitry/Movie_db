@@ -117,7 +117,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Movie> result){
             super.onPostExecute(result);
-
             MainActivity.this.mPopMovies.addAll(result);
             MainActivity.this.mAdapter.notifyDataSetChanged();
         }
@@ -200,15 +199,11 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<Movie> result){
             super.onPostExecute(result);
-
             MainActivity.this.mPopMovies.addAll(result);
             MainActivity.this.mAdapter.notifyDataSetChanged();
         }
 
     }
-
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -223,13 +218,22 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.popular_movies:
-                new GetPopMovies();
+                // Clear before fetch
+                this.mPopMovies.clear();
+                this.mAdapter.notifyDataSetChanged();
+
+                // Should call execute for asynstasks
+                new GetPopMovies().execute();
                 return true;
             case R.id.upcoming_movies:
-
                 return true;
             case R.id.top_rated:
-                new GetTopMovies();
+                // Clear before fetch
+                this.mPopMovies.clear();
+                this.mAdapter.notifyDataSetChanged();
+
+                // Should call execute for asynstasks
+                new GetTopMovies().execute();
                 return true;
         }
 
