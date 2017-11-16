@@ -44,12 +44,11 @@ class MovieAdapter extends RecyclerView.Adapter
 
         holder.title.setText(popMovie.getTitle());
 
-        Picasso.with(context)
+        Picasso.with(holder.itemView.getContext())
                 .load("https://image.tmdb.org/t/p/w185" + popMovie.getPoster_path())
-                .transform(new RoundedTransformation(20, 5))
+                .transform(new RoundedTransformation(5, 0))
                 .error(R.mipmap.ic_launcher)
                 .into(holder.poster_path);
-
     }
 
     @Override
