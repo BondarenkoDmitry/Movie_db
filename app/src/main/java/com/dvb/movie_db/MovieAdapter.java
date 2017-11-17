@@ -79,7 +79,7 @@ class MovieAdapter extends RecyclerView.Adapter
 
         }
 
-        // Added OnClick method. But the toast doesn't show in the app
+        // Added OnClick method. But the toast doesn't show
         @Override
         public void onClick(View view) {
             Toast.makeText(view.getContext(), "You've clicked position: " + getPosition(), Toast.LENGTH_SHORT).show();
