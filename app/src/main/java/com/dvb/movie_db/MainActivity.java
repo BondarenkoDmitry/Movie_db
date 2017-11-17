@@ -44,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
     private class GetPopMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
 
         @Override
@@ -98,6 +100,89 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
                 }
+
+            } else {
+                Log.e(TAG, "Couldn't get json from server.");
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(getApplicationContext(),
+                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+
+            return popMovies;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Movie> result){
+            super.onPostExecute(result);
+
+            MainActivity.this.mPopMovies.addAll(result);
+            MainActivity.this.mAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+
+
+    private class GetUpcomingMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            Toast.makeText(MainActivity.this,
+                    "Json Data is downloading", Toast.LENGTH_SHORT).show();
+        }
+
+
+        @Override
+        protected ArrayList<Movie> doInBackground(Object... arg0) {
+            HttpHandler sh = new HttpHandler();
+
+            String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
+            String siteUrl = "https://api.themoviedb.org/3/movie/";
+            String sortBy = "upcoming";
+
+            final String url = siteUrl + sortBy + apiKey;
+
+            String jsonStr = sh.makeServiceCall(url);
+
+
+            ArrayList<Movie> popMovies = new ArrayList<>();
+
+            Log.e(TAG, "Response from url: " + jsonStr);
+            if (jsonStr != null) {
+                try {
+                    JSONObject jsonObj = new JSONObject(jsonStr);
+                    JSONArray movies = jsonObj.getJSONArray("results");
+
+                    // looping through All Movies
+                    for (int i = 0; i < movies.length(); i++) {
+                        JSONObject jsonMovie = movies.getJSONObject(i);
+
+                        String title = jsonMovie.getString("title");
+                        String poster_path = jsonMovie.getString("poster_path");
+
+                        // populate the local list in order to be pushed to post execute method
+                        popMovies.add(new Movie(title, poster_path));
+
+                    }
+
+                } catch (final JSONException e) {
+                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),
+                                    "Json parsing error: " + e.getMessage(),
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+
 
             } else {
                 Log.e(TAG, "Couldn't get json from server.");
@@ -223,13 +308,24 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
 
             case R.id.popular_movies:
-                new GetPopMovies();
+                // Clear before fetch
+                this.mPopMovies.clear();
+                this.mAdapter.notifyDataSetChanged();
+                new GetPopMovies().execute();
                 return true;
-            case R.id.upcoming_movies:
 
+
+            case R.id.upcoming_movies:
+                this.mPopMovies.clear();
+                this.mAdapter.notifyDataSetChanged();
+                new GetUpcomingMovies().execute();
                 return true;
+
+
             case R.id.top_rated:
-                new GetTopMovies();
+                this.mPopMovies.clear();
+                this.mAdapter.notifyDataSetChanged();
+                new GetTopMovies().execute();
                 return true;
         }
 
