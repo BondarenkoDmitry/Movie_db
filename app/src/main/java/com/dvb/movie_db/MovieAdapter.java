@@ -74,6 +74,9 @@ class MovieAdapter extends RecyclerView.Adapter
         public RecyclerViewHolder(View view){
             super(view);
 
+            // Add click listener on the view
+            view.setOnClickListener(this);
+
             poster_path = (ImageView)view.findViewById(R.id.img);
             title = (TextView)view.findViewById(R.id.f_name);
 
