@@ -1,6 +1,8 @@
-package com.dvb.movie_db;
+package com.dvb.movie_db.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +11,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dvb.movie_db.Activities.MovieReviewActivity;
+import com.dvb.movie_db.Model.Movie;
+import com.dvb.movie_db.R;
+import com.dvb.movie_db.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -77,12 +83,22 @@ public class MovieAdapter extends RecyclerView.Adapter
             poster_path = (ImageView)view.findViewById(R.id.img);
             title = (TextView)view.findViewById(R.id.f_name);
 
+            // To catch the click
+            view.setOnClickListener(this);
         }
 
         // Added OnClick method. But the toast doesn't show
         @Override
         public void onClick(View view) {
             Toast.makeText(view.getContext(), "You've clicked position: " + getPosition(), Toast.LENGTH_SHORT).show();
+
+            // Start The MovieReview Activity
+            Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);
+
+            // Pass the data (movie id) to the new activity
+            intent.putExtra("MOVIE_ID", "514"); // TODO this data should be present in Movie object
+
+            view.getContext().startActivity(intent);
         }
     }
 
