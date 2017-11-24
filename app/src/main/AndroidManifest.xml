@@ -19,6 +19,8 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- New Activity should be registered in manifest -->
+        <activity android:name=".Activities.MovieReviewActivity" />
     </application>
 
 </manifest>
