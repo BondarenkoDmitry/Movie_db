@@ -1,4 +1,4 @@
-package com.dvb.movie_db;
+package com.dvb.movie_db.Model;
 
 /**
  * Created by dmitrybondarenko on 14.11.17.

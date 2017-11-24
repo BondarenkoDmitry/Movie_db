@@ -1,4 +1,4 @@
-package com.dvb.movie_db;
+package com.dvb.movie_db.Adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dvb.movie_db.Model.Movie;
+import com.dvb.movie_db.R;
+import com.dvb.movie_db.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -17,7 +20,7 @@ import java.util.ArrayList;
  * Created by dmitrybondarenko on 14.11.17.
  */
 
-class MovieAdapter extends RecyclerView.Adapter
+public class MovieAdapter extends RecyclerView.Adapter
         <MovieAdapter.RecyclerViewHolder> {
 
     private Context context;
@@ -74,16 +77,43 @@ class MovieAdapter extends RecyclerView.Adapter
         public RecyclerViewHolder(View view){
             super(view);
 
+            //Add listener to the view.
+            view.setOnClickListener(this);
+
             poster_path = (ImageView)view.findViewById(R.id.img);
             title = (TextView)view.findViewById(R.id.f_name);
 
         }
 
-        // Added OnClick method. But the toast doesn't show
+
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "You've clicked position: " + getPosition(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), "You've clicked position: "
+                    + getPosition(), Toast.LENGTH_SHORT).show();
+
+
+            // How shall we send the movie ID?
+            // So that in movie_review_item we would have details of the particular movie?
         }
     }
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
