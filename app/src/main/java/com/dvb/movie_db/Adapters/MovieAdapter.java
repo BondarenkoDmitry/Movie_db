@@ -1,6 +1,7 @@
-package com.dvb.movie_db;
+package com.dvb.movie_db.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dvb.movie_db.Activities.MovieReviewActivity;
+import com.dvb.movie_db.Model.Movie;
+import com.dvb.movie_db.R;
+import com.dvb.movie_db.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import static android.R.attr.id;
 
 /**
  * Created by dmitrybondarenko on 14.11.17.
@@ -29,8 +36,6 @@ public class MovieAdapter extends RecyclerView.Adapter
     }
 
 
-    // Is something missing here?
-
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -45,6 +50,10 @@ public class MovieAdapter extends RecyclerView.Adapter
 
         Movie popMovie = mPopMovies.get(position);
 
+
+//        holder.id.setText(popMovie.getId()); This must be wrong?
+// setText doesn't work here. What should we use?
+        
         holder.title.setText(popMovie.getTitle());
         Picasso.with(holder.itemView.getContext())
                 .load("https://image.tmdb.org/t/p/w185" + popMovie.getPoster_path())
@@ -65,9 +74,9 @@ public class MovieAdapter extends RecyclerView.Adapter
 
 
 
-
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
+        int id;
         ImageView poster_path;
         TextView title;
 
@@ -77,12 +86,24 @@ public class MovieAdapter extends RecyclerView.Adapter
             poster_path = (ImageView)view.findViewById(R.id.img);
             title = (TextView)view.findViewById(R.id.f_name);
 
+            view.setOnClickListener(this);
         }
 
-        // Added OnClick method. But the toast doesn't show
+
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "You've clicked position: " + getPosition(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), "You've clicked position: "
+                    + getPosition(), Toast.LENGTH_SHORT).show();
+
+            // Start The MovieReview Activity
+            Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);
+
+            // Pass the data (movie id) to the new activity
+            intent.putExtra("MOVIE_ID", "514");
+
+
+            view.getContext().startActivity(intent);
+
         }
     }
 

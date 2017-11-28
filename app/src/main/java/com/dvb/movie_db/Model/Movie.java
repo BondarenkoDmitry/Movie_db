@@ -1,5 +1,7 @@
 package com.dvb.movie_db.Model;
 
+import static android.R.attr.id;
+
 /**
  * Created by dmitrybondarenko on 14.11.17.
  */
@@ -7,16 +9,26 @@ package com.dvb.movie_db.Model;
 
 public class Movie {
 
+    private int id;
     private String title;
     private String poster_path;
 
 
-    public Movie(String title, String poster_path) {
+
+    public Movie(int id, String title, String poster_path) {
 
         this.setTitle(title);
         this.setPoster_path(poster_path);
     }
 
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;

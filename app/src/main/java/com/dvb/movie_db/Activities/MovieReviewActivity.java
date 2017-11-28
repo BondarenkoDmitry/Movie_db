@@ -46,7 +46,9 @@ public class MovieReviewActivity extends AppCompatActivity {
 
         String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
         String siteUrl = "https://api.themoviedb.org/3/movie/";
-        String movieID = "514";
+
+
+        String movieID = getIntent().getExtras().getString("MOVIE_ID");
 
         String url = siteUrl + movieID + apiKey;
 
@@ -75,9 +77,7 @@ public class MovieReviewActivity extends AppCompatActivity {
                         } else {
                             alertUserAboutError();
                         }
-//                        catch (IOException e){
-//                            Log.e(TAG, "Exception caught: ", e);
-//                        }
+
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Exception caught: ", e);

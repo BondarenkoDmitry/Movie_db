@@ -21,8 +21,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import static android.R.attr.apiKey;
+import static com.dvb.movie_db.R.string.popular;
+
 public class MainActivity extends AppCompatActivity {
 
+    String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
+    String siteUrl = "https://api.themoviedb.org/3/movie/";
+    String popular = "popular";
+    String upcoming = "upcoming";
+    String topRated = "top_rated";
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -65,11 +73,8 @@ public class MainActivity extends AppCompatActivity {
         protected ArrayList<Movie> doInBackground(Object... arg0) {
             HttpHandler sh = new HttpHandler();
 
-            String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
-            String siteUrl = "https://api.themoviedb.org/3/movie/";
-            String sortBy = "popular";
 
-            final String url = siteUrl + sortBy + apiKey;
+            final String url = siteUrl + popular + apiKey;
 
             String jsonStr = sh.makeServiceCall(url);
 
@@ -88,9 +93,10 @@ public class MainActivity extends AppCompatActivity {
 
                         String title = jsonMovie.getString("title");
                         String poster_path = jsonMovie.getString("poster_path");
+                        int id = jsonMovie.getInt("id");
 
                         // populate the local list in order to be pushed to post execute method
-                        popMovies.add(new Movie(title, poster_path));
+                        popMovies.add(new Movie(id, title, poster_path));
 
                     }
 
@@ -147,11 +153,7 @@ public class MainActivity extends AppCompatActivity {
         protected ArrayList<Movie> doInBackground(Object... arg0) {
             HttpHandler sh = new HttpHandler();
 
-            String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
-            String siteUrl = "https://api.themoviedb.org/3/movie/";
-            String sortBy = "upcoming";
-
-            final String url = siteUrl + sortBy + apiKey;
+            final String url = siteUrl + upcoming + apiKey;
 
             String jsonStr = sh.makeServiceCall(url);
 
@@ -170,9 +172,10 @@ public class MainActivity extends AppCompatActivity {
 
                         String title = jsonMovie.getString("title");
                         String poster_path = jsonMovie.getString("poster_path");
+                        int id = jsonMovie.getInt("id");
 
                         // populate the local list in order to be pushed to post execute method
-                        popMovies.add(new Movie(title, poster_path));
+                        popMovies.add(new Movie(id, title, poster_path));
 
                     }
 
@@ -230,11 +233,8 @@ public class MainActivity extends AppCompatActivity {
         protected ArrayList<Movie> doInBackground(Object... arg0) {
             HttpHandler sh = new HttpHandler();
 
-            String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
-            String siteUrl = "https://api.themoviedb.org/3/movie/";
-            String sortBy = "top_rated";
 
-            final String url = siteUrl + sortBy + apiKey;
+            final String url = siteUrl + topRated + apiKey;
 
             String jsonStr = sh.makeServiceCall(url);
 
@@ -253,9 +253,10 @@ public class MainActivity extends AppCompatActivity {
 
                         String title = jsonMovie.getString("title");
                         String poster_path = jsonMovie.getString("poster_path");
+                        int id = jsonMovie.getInt("id");
 
                         // populate the local list in order to be pushed to post execute method
-                        popMovies.add(new Movie(title, poster_path));
+                        popMovies.add(new Movie(id, title, poster_path));
 
                     }
 
