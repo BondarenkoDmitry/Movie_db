@@ -1,7 +1,8 @@
-package com.dvb.movie_db.Adapters;
+package com.dvb.movie_db;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -50,10 +51,6 @@ public class MovieAdapter extends RecyclerView.Adapter
 
         Movie popMovie = mPopMovies.get(position);
 
-
-//        holder.id.setText(popMovie.getId()); This must be wrong?
-// setText doesn't work here. What should we use?
-        
         holder.title.setText(popMovie.getTitle());
         Picasso.with(holder.itemView.getContext())
                 .load("https://image.tmdb.org/t/p/w185" + popMovie.getPoster_path())
@@ -92,8 +89,7 @@ public class MovieAdapter extends RecyclerView.Adapter
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(view.getContext(), "You've clicked position: "
-                    + getPosition(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(view.getContext(), "You've clicked position: " + getPosition(), Toast.LENGTH_SHORT).show();
 
             // Start The MovieReview Activity
             Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);
@@ -101,9 +97,7 @@ public class MovieAdapter extends RecyclerView.Adapter
             // Pass the data (movie id) to the new activity
             intent.putExtra("MOVIE_ID", "514");
 
-
             view.getContext().startActivity(intent);
-
         }
     }
 
