@@ -47,9 +47,9 @@ public class MovieAdapter extends RecyclerView.Adapter
     }
 
     @Override
-    public void onBindViewHolder(RecyclerViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerViewHolder holder, final int position) {
 
-        Movie popMovie = mPopMovies.get(position);
+        final Movie popMovie = mPopMovies.get(position);
 
         holder.title.setText(popMovie.getTitle());
         Picasso.with(holder.itemView.getContext())
@@ -57,6 +57,22 @@ public class MovieAdapter extends RecyclerView.Adapter
                 .transform(new RoundedTransformation(5, 0))
                 .error(R.mipmap.ic_launcher)
                 .into(holder.poster_path);
+
+        // Show movie reviews
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "You've clicked position: " + position, Toast.LENGTH_SHORT).show();
+
+                // Start The MovieReview Activity
+                Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);
+
+                // Pass the data (movie id) to the new activity
+                intent.putExtra("MOVIE_ID", popMovie.getId());
+
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 
 
@@ -71,7 +87,7 @@ public class MovieAdapter extends RecyclerView.Adapter
 
 
 
-    public static class RecyclerViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
         int id;
         ImageView poster_path;
@@ -82,22 +98,6 @@ public class MovieAdapter extends RecyclerView.Adapter
 
             poster_path = (ImageView)view.findViewById(R.id.img);
             title = (TextView)view.findViewById(R.id.f_name);
-
-            view.setOnClickListener(this);
-        }
-
-
-        @Override
-        public void onClick(View view) {
-            Toast.makeText(view.getContext(), "You've clicked position: " + getPosition(), Toast.LENGTH_SHORT).show();
-
-            // Start The MovieReview Activity
-            Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);
-
-            // Pass the data (movie id) to the new activity
-            intent.putExtra("MOVIE_ID", "514");
-
-            view.getContext().startActivity(intent);
         }
     }
 

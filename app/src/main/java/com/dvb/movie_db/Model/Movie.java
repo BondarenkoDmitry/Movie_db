@@ -16,7 +16,7 @@ public class Movie {
 
 
     public Movie(int id, String title, String poster_path) {
-
+        this.setId(id);
         this.setTitle(title);
         this.setPoster_path(poster_path);
     }
