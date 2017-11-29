@@ -10,9 +10,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.dvb.movie_db.Adapters.MovieAdapter;
 import com.dvb.movie_db.HttpHandler;
 import com.dvb.movie_db.Model.Movie;
+import com.dvb.movie_db.MovieAdapter;
 import com.dvb.movie_db.R;
 
 import org.json.JSONArray;
@@ -20,9 +20,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-
-import static android.R.attr.apiKey;
-import static com.dvb.movie_db.R.string.popular;
 
 public class MainActivity extends AppCompatActivity {
 

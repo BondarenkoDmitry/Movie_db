@@ -46,7 +46,7 @@ public class MovieReviewActivity extends AppCompatActivity {
         String siteUrl = "https://api.themoviedb.org/3/movie/";
 
 
-        String movieID = getIntent().getExtras().getString("MOVIE_ID");
+        int movieID = getIntent().getExtras().getInt("MOVIE_ID");
 
         String url = siteUrl + movieID + apiKey;
 
