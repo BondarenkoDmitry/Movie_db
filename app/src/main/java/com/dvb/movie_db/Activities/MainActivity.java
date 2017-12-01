@@ -10,9 +10,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.dvb.movie_db.Adapters.MovieAdapter;
 import com.dvb.movie_db.HttpHandler;
 import com.dvb.movie_db.Model.Movie;
-import com.dvb.movie_db.MovieAdapter;
+import com.dvb.movie_db.Adapters.MovieAdapter;
 import com.dvb.movie_db.R;
 
 import org.json.JSONArray;
@@ -28,13 +29,10 @@ public class MainActivity extends AppCompatActivity {
     String popular = "popular";
     String upcoming = "upcoming";
     String topRated = "top_rated";
-
-    private String TAG = MainActivity.class.getSimpleName();
-
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;
-
+    private String TAG = MainActivity.class.getSimpleName();
     // ArrayList, I'm using it for adapter
     private ArrayList<Movie> mPopMovies = new ArrayList<>();
 
@@ -53,8 +51,41 @@ public class MainActivity extends AppCompatActivity {
         new GetPopMovies().execute();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case R.id.popular_movies:
+                // Clear before fetch
+                this.mPopMovies.clear();
+                this.mAdapter.notifyDataSetChanged();
+                new GetPopMovies().execute();
+                return true;
 
 
+            case R.id.upcoming_movies:
+                this.mPopMovies.clear();
+                this.mAdapter.notifyDataSetChanged();
+                new GetUpcomingMovies().execute();
+                return true;
+
+
+            case R.id.top_rated:
+                this.mPopMovies.clear();
+                this.mAdapter.notifyDataSetChanged();
+                new GetTopMovies().execute();
+                return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 
     private class GetPopMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
 
@@ -134,8 +165,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     private class GetUpcomingMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
 
         @Override
@@ -214,8 +243,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
-
     private class GetTopMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
 
         @Override
@@ -293,46 +320,6 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.mAdapter.notifyDataSetChanged();
         }
 
-    }
-
-
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        switch (item.getItemId()) {
-
-            case R.id.popular_movies:
-                // Clear before fetch
-                this.mPopMovies.clear();
-                this.mAdapter.notifyDataSetChanged();
-                new GetPopMovies().execute();
-                return true;
-
-
-            case R.id.upcoming_movies:
-                this.mPopMovies.clear();
-                this.mAdapter.notifyDataSetChanged();
-                new GetUpcomingMovies().execute();
-                return true;
-
-
-            case R.id.top_rated:
-                this.mPopMovies.clear();
-                this.mAdapter.notifyDataSetChanged();
-                new GetTopMovies().execute();
-                return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
 }
