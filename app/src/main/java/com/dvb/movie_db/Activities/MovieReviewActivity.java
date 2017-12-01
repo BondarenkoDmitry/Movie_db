@@ -1,18 +1,17 @@
 package com.dvb.movie_db.Activities;
 
 import android.content.Context;
-import android.content.res.ObbInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.method.MovementMethod;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.RatingBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvb.movie_db.AlertDialogFragment;
-import com.dvb.movie_db.HttpHandler;
 import com.dvb.movie_db.Model.MovieReview;
 import com.dvb.movie_db.R;
 import com.squareup.okhttp.Call;
@@ -21,12 +20,13 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
+
+import butterknife.ButterKnife;
+import butterknife.InjectView;
 
 /**
  * Created by dmitrybondarenko on 22.11.17.
@@ -37,16 +37,23 @@ public class MovieReviewActivity extends AppCompatActivity {
     private static final String TAG = MovieReviewActivity.class.getSimpleName();
     private MovieReview mMovieReview;
 
+    @InjectView(R.id.mrOriginalTitle)TextView mOriginalTitle;
+    @InjectView(R.id.mrOverview)TextView mOverView;
+    @InjectView(R.id.mrReleaseDate) TextView mReleaseDate;
+    @InjectView(R.id.mrPoster)ImageView mPoster;
+    @InjectView(R.id.mrRating) RatingBar mRatingBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.movie_review_item);
+        setContentView(R.layout.movie_review);
+        ButterKnife.inject(this);
 
         String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
         String siteUrl = "https://api.themoviedb.org/3/movie/";
 
 
-        String movieID = getIntent().getExtras().getString("MOVIE_ID");
+        int movieID = getIntent().getExtras().getInt("MOVIE_ID");
 
         String url = siteUrl + movieID + apiKey;
 
@@ -72,6 +79,12 @@ public class MovieReviewActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()){
                             mMovieReview = getMovieReviewJson(jsonData);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    updateDisplay();
+                                }
+                            });
                         } else {
                             alertUserAboutError();
                         }
@@ -90,11 +103,21 @@ public class MovieReviewActivity extends AppCompatActivity {
         }
     }
 
+    private void updateDisplay(){
+        mOriginalTitle.setText(mMovieReview.getOriginal_title());
+        mOverView.setText(mMovieReview.getOverview());
+    }
+
     private MovieReview getMovieReviewJson(String jsonData) throws JSONException {
         JSONObject reviewJson = new JSONObject(jsonData);
-        String original_title = reviewJson.getString("original_title");
-        String poster_path = reviewJson.getString("poster_path");
-        return null;
+
+        MovieReview aMovie = new MovieReview();
+        aMovie.setOriginal_title(reviewJson.getString("original_title"));
+        aMovie.setPoster_path(reviewJson.getString("poster_path"));
+        aMovie.setOverview(reviewJson.getString("overview"));
+        aMovie.setVote_average(reviewJson.getInt("vote_average"));
+
+        return aMovie;
     }
 
 
