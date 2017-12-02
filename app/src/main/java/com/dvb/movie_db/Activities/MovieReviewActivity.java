@@ -14,11 +14,13 @@ import android.widget.Toast;
 import com.dvb.movie_db.AlertDialogFragment;
 import com.dvb.movie_db.Model.MovieReview;
 import com.dvb.movie_db.R;
+import com.dvb.movie_db.RoundedTransformation;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,8 +54,9 @@ public class MovieReviewActivity extends AppCompatActivity {
         String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
         String siteUrl = "https://api.themoviedb.org/3/movie/";
 
-
-        int movieID = getIntent().getExtras().getInt("MOVIE_ID");
+        int movieID = getIntent()
+                .getExtras()
+                .getInt("MOVIE_ID");
 
         String url = siteUrl + movieID + apiKey;
 
@@ -106,6 +109,15 @@ public class MovieReviewActivity extends AppCompatActivity {
     private void updateDisplay(){
         mOriginalTitle.setText(mMovieReview.getOriginal_title());
         mOverView.setText(mMovieReview.getOverview());
+
+//        Picasso.with(mPoster.getContext())
+//                .load("https://image.tmdb.org/t/p/w185" + mMovieReview.getPoster_path())
+//                .transform(new RoundedTransformation(5, 0))
+//                .error(R.mipmap.ic_launcher)
+//                .into(???.poster_path);
+
+//        mRatingBar.setNumStars((Integer) mMovieReview.getVote_average());
+
     }
 
     private MovieReview getMovieReviewJson(String jsonData) throws JSONException {
@@ -116,7 +128,8 @@ public class MovieReviewActivity extends AppCompatActivity {
         aMovie.setPoster_path(reviewJson.getString("poster_path"));
         aMovie.setOverview(reviewJson.getString("overview"));
         aMovie.setVote_average(reviewJson.getInt("vote_average"));
-
+//        aMovie.setDate(reviewJson.getString("release_data"));
+//      There's a mistake here. Why?
         return aMovie;
     }
 

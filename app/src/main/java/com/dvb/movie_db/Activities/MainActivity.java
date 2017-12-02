@@ -69,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
                 new GetPopMovies().execute();
                 return true;
 
-
             case R.id.upcoming_movies:
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
