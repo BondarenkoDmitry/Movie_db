@@ -110,13 +110,14 @@ public class MovieReviewActivity extends AppCompatActivity {
         mOriginalTitle.setText(mMovieReview.getOriginal_title());
         mOverView.setText(mMovieReview.getOverview());
 
-//        Picasso.with(mPoster.getContext())
-//                .load("https://image.tmdb.org/t/p/w185" + mMovieReview.getPoster_path())
-//                .transform(new RoundedTransformation(5, 0))
-//                .error(R.mipmap.ic_launcher)
-//                .into(???.poster_path);
+        Picasso.with(mPoster.getContext())
+                .load("https://image.tmdb.org/t/p/w185" + mMovieReview.getPoster_path())
+                .transform(new RoundedTransformation(5, 0))
+                .error(R.mipmap.ic_launcher)
+                .into(mPoster);
 
-//        mRatingBar.setNumStars((Integer) mMovieReview.getVote_average());
+        // Max stars set to 10 in layout, make sure to configure it according to the backend value
+        mRatingBar.setRating((Integer) mMovieReview.getVote_average());
 
     }
 
