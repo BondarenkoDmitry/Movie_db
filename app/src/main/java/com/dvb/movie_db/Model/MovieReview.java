@@ -60,38 +60,13 @@ public class MovieReview {
 
 
 
-
     public Date getDate() {
         return date;
     }
 
-    public void setDate(Date d) {
-        date = d;
-    }
-
-    public String getFormattedDate() {
-        if (formattedDate == null || formattedDate.equals("null")){
-            return "null";
-        }
-        return formattedDate;
+    public void setDate(String release_date) {
+        this.date = date;
     }
 
 
-
-    public void setFormattedDate(String stringDate) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-
-        try {
-
-            Date unformatedDate = formatter.parse(stringDate);
-
-            //We use setDate() method so we don't have to repeat code in adapter for every film
-            setDate(unformatedDate);
-
-            formattedDate = formatter.format(unformatedDate);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-    }
 }

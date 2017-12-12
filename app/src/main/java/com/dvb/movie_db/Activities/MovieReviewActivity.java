@@ -26,6 +26,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.StreamCorruptedException;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -109,27 +110,31 @@ public class MovieReviewActivity extends AppCompatActivity {
     private void updateDisplay(){
         mOriginalTitle.setText(mMovieReview.getOriginal_title());
         mOverView.setText(mMovieReview.getOverview());
+//        mReleaseDate.setText(mMovieReview.getDate());
+//        Here goes a mistake.
 
-//        Picasso.with(mPoster.getContext())
-//                .load("https://image.tmdb.org/t/p/w185" + mMovieReview.getPoster_path())
-//                .transform(new RoundedTransformation(5, 0))
-//                .error(R.mipmap.ic_launcher)
-//                .into(???.poster_path);
+        Picasso.with(mPoster.getContext())
+                .load("https://image.tmdb.org/t/p/w185" + mMovieReview.getPoster_path())
+                .transform(new RoundedTransformation(5, 0))
+                .error(R.mipmap.ic_launcher)
+                .into(mPoster);
 
-//        mRatingBar.setNumStars((Integer) mMovieReview.getVote_average());
-
+        mRatingBar.setRating((Integer) mMovieReview.getVote_average());
     }
 
     private MovieReview getMovieReviewJson(String jsonData) throws JSONException {
         JSONObject reviewJson = new JSONObject(jsonData);
 
         MovieReview aMovie = new MovieReview();
+
+
+
         aMovie.setOriginal_title(reviewJson.getString("original_title"));
         aMovie.setPoster_path(reviewJson.getString("poster_path"));
         aMovie.setOverview(reviewJson.getString("overview"));
         aMovie.setVote_average(reviewJson.getInt("vote_average"));
-//        aMovie.setDate(reviewJson.getString("release_data"));
-//      There's a mistake here. Why?
+        aMovie.setDate(reviewJson.getString("release_date"));
+
         return aMovie;
     }
 
