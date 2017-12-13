@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.StreamCorruptedException;
+import java.text.DateFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
@@ -110,8 +111,12 @@ public class MovieReviewActivity extends AppCompatActivity {
     private void updateDisplay(){
         mOriginalTitle.setText(mMovieReview.getOriginal_title());
         mOverView.setText(mMovieReview.getOverview());
-//        mReleaseDate.setText(mMovieReview.getDate());
-//        Here goes a mistake.
+        // Should format the date to string
+        if (mMovieReview.getDate() != null) {
+            // Current system (locale) format
+            String formattedDate = DateFormat.getDateInstance().format(mMovieReview.getDate());
+            mReleaseDate.setText(formattedDate);
+        }
 
         Picasso.with(mPoster.getContext())
                 .load("https://image.tmdb.org/t/p/w185" + mMovieReview.getPoster_path())

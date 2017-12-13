@@ -1,7 +1,9 @@
 package com.dvb.movie_db.Model;
 
+import android.util.Log;
 import android.view.View;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -16,9 +18,7 @@ public class MovieReview {
     private String poster_path;
     private String overview;
     private Number vote_average;
-
     private Date date;
-    private String formattedDate;
 
     public MovieReview(){
         this.setOriginal_title(original_title);
@@ -65,7 +65,12 @@ public class MovieReview {
     }
 
     public void setDate(String release_date) {
-        this.date = date;
+        try {
+            SimpleDateFormat serverFormat = new SimpleDateFormat("yyyy-MM-dd");
+            this.date = serverFormat.parse(release_date);
+        } catch (ParseException e) {
+            Log.w("MovieReview", "Failed to parse the JSON date: " + release_date);
+        }
     }
 
 
