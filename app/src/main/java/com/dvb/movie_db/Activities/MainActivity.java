@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
 
-        new GetPopMovies().execute();
+        new FetchMovies().execute(popular);
     }
 
     @Override
@@ -66,27 +66,30 @@ public class MainActivity extends AppCompatActivity {
                 // Clear before fetch
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
-                new GetPopMovies().execute();
+                // Pass the part of the url to the async task
+                new FetchMovies().execute(popular);
                 return true;
 
             case R.id.upcoming_movies:
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
-                new GetUpcomingMovies().execute();
+                // Pass the part of the url to the async task
+                new FetchMovies().execute(upcoming);
                 return true;
 
 
             case R.id.top_rated:
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
-                new GetTopMovies().execute();
+                // Pass the part of the url to the async task
+                new FetchMovies().execute(topRated);
                 return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private class GetPopMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
+    private class FetchMovies extends AsyncTask<String, Object, ArrayList<Movie>> {
 
         @Override
         protected void onPreExecute() {
@@ -95,17 +98,16 @@ public class MainActivity extends AppCompatActivity {
                     "Json Data is downloading", Toast.LENGTH_SHORT).show();
         }
 
-
         @Override
-        protected ArrayList<Movie> doInBackground(Object... arg0) {
+        protected ArrayList<Movie> doInBackground(String... arg0) {
             HttpHandler sh = new HttpHandler();
 
 
-            final String url = siteUrl + popular + apiKey;
+            final String url = siteUrl + arg0[0] + apiKey;
 
             String jsonStr = sh.makeServiceCall(url);
 
-//            Local list of movies
+            // Local list of movies
             ArrayList<Movie> popMovies = new ArrayList<>();
 
             Log.e(TAG, "Response from url: " + jsonStr);
@@ -163,163 +165,5 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    private class GetUpcomingMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Toast.makeText(MainActivity.this,
-                    "Json Data is downloading", Toast.LENGTH_SHORT).show();
-        }
-
-
-        @Override
-        protected ArrayList<Movie> doInBackground(Object... arg0) {
-            HttpHandler sh = new HttpHandler();
-
-            final String url = siteUrl + upcoming + apiKey;
-
-            String jsonStr = sh.makeServiceCall(url);
-
-
-            ArrayList<Movie> popMovies = new ArrayList<>();
-
-            Log.e(TAG, "Response from url: " + jsonStr);
-            if (jsonStr != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-                    JSONArray movies = jsonObj.getJSONArray("results");
-
-                    // looping through All Movies
-                    for (int i = 0; i < movies.length(); i++) {
-                        JSONObject jsonMovie = movies.getJSONObject(i);
-
-                        String title = jsonMovie.getString("title");
-                        String poster_path = jsonMovie.getString("poster_path");
-                        int id = jsonMovie.getInt("id");
-
-                        // populate the local list in order to be pushed to post execute method
-                        popMovies.add(new Movie(id, title, poster_path));
-
-                    }
-
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-
-
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-            return popMovies;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Movie> result){
-            super.onPostExecute(result);
-
-            MainActivity.this.mPopMovies.addAll(result);
-            MainActivity.this.mAdapter.notifyDataSetChanged();
-        }
-
-    }
-
-    private class GetTopMovies extends AsyncTask<Object, Object, ArrayList<Movie>> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            Toast.makeText(MainActivity.this,
-                    "Json Data is downloading", Toast.LENGTH_SHORT).show();
-        }
-
-
-        @Override
-        protected ArrayList<Movie> doInBackground(Object... arg0) {
-            HttpHandler sh = new HttpHandler();
-
-
-            final String url = siteUrl + topRated + apiKey;
-
-            String jsonStr = sh.makeServiceCall(url);
-
-
-            ArrayList<Movie> popMovies = new ArrayList<>();
-
-            Log.e(TAG, "Response from url: " + jsonStr);
-            if (jsonStr != null) {
-                try {
-                    JSONObject jsonObj = new JSONObject(jsonStr);
-                    JSONArray movies = jsonObj.getJSONArray("results");
-
-                    // looping through All Movies
-                    for (int i = 0; i < movies.length(); i++) {
-                        JSONObject jsonMovie = movies.getJSONObject(i);
-
-                        String title = jsonMovie.getString("title");
-                        String poster_path = jsonMovie.getString("poster_path");
-                        int id = jsonMovie.getInt("id");
-
-                        // populate the local list in order to be pushed to post execute method
-                        popMovies.add(new Movie(id, title, poster_path));
-
-                    }
-
-                } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                        }
-                    });
-                }
-
-
-            } else {
-                Log.e(TAG, "Couldn't get json from server.");
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
-                                Toast.LENGTH_LONG).show();
-                    }
-                });
-            }
-
-            return popMovies;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Movie> result){
-            super.onPostExecute(result);
-
-            MainActivity.this.mPopMovies.addAll(result);
-            MainActivity.this.mAdapter.notifyDataSetChanged();
-        }
-
-    }
-
 }
 
