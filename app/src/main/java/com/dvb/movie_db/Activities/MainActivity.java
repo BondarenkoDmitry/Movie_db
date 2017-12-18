@@ -24,8 +24,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    public String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
-    public String siteUrl = "https://api.themoviedb.org/3/movie/";
+    String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
+    String siteUrl = "https://api.themoviedb.org/3/movie/";
     String popular = "popular";
     String upcoming = "upcoming";
     String topRated = "top_rated";

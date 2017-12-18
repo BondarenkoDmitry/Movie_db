@@ -34,6 +34,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 
 import static android.R.attr.apiKey;
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 /**
  * Created by dmitrybondarenko on 22.11.17.
@@ -57,7 +58,8 @@ public class MovieReviewActivity extends AppCompatActivity {
         ButterKnife.inject(this);
 
 
-        String SiteURL = "https://api.themoviedb.org/3/movie/";
+        String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
+        String siteUrl = "https://api.themoviedb.org/3/movie/";
         String REVIEWS = "/reviews";
         String VIDEOS = "/videos";
 
@@ -65,14 +67,22 @@ public class MovieReviewActivity extends AppCompatActivity {
                 .getExtras()
                 .getInt("MOVIE_ID");
 
-        String url = SiteURL + movieID + apiKey;
-        String videoURL = SiteURL + movieID + REVIEWS + apiKey;
-        String reviewsULR = SiteURL + movieID + VIDEOS + apiKey;
+        String url = siteUrl + movieID + apiKey;
+        String videoURL = siteUrl + movieID + REVIEWS + apiKey;
+        String reviewsULR = siteUrl + movieID + VIDEOS + apiKey;
 
         if (isNetworkAvailable()){
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
+
+//                    .url(videoURL)
+//                    .url(reviewsULR)
+
+//                    It doesn't work this way :(
+//                    But it works when I copy the whole method 3 times.
+//                    Is there any way to refactor it?
+
                     .build();
 
             Call call = client.newCall(request);
@@ -144,7 +154,6 @@ public class MovieReviewActivity extends AppCompatActivity {
         aMovie.setOverview(reviewJson.getString("overview"));
         aMovie.setVote_average(reviewJson.getInt("vote_average"));
         aMovie.setDate(reviewJson.getString("release_date"));
-
 
         return aMovie;
     }
