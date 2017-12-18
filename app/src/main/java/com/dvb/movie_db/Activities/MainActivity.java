@@ -13,8 +13,8 @@ import android.widget.Toast;
 import com.dvb.movie_db.Adapters.MovieAdapter;
 import com.dvb.movie_db.HttpHandler;
 import com.dvb.movie_db.Model.Movie;
-import com.dvb.movie_db.Adapters.MovieAdapter;
 import com.dvb.movie_db.R;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,11 +24,12 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
-    String siteUrl = "https://api.themoviedb.org/3/movie/";
+    public String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
+    public String siteUrl = "https://api.themoviedb.org/3/movie/";
     String popular = "popular";
     String upcoming = "upcoming";
     String topRated = "top_rated";
+
 
 
     RecyclerView mRecyclerView;
@@ -68,24 +69,33 @@ public class MainActivity extends AppCompatActivity {
                 // Clear before fetch
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
+
+                // Pass the part of the url to the async task
+
                 new FetchMovies().execute(popular);
                 return true;
 
             case R.id.upcoming_movies:
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
+       // Pass the part of the url to the async task
+
                 new FetchMovies().execute(upcoming);
                 return true;
 
             case R.id.top_rated:
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
+
                 new FetchMovies().execute(topRated);
                 return true;
 
             case R.id.my_movies:
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
+                // Pass the part of the url to the async task
+                new FetchMovies().execute(topRated);
+
                 return true;
         }
 
@@ -101,7 +111,6 @@ public class MainActivity extends AppCompatActivity {
                     "Json Data is downloading", Toast.LENGTH_SHORT).show();
         }
 
-
         @Override
         protected ArrayList<Movie> doInBackground(String... arg0) {
             HttpHandler sh = new HttpHandler();
@@ -111,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
 
             String jsonStr = sh.makeServiceCall(url);
 
-//            Local list of movies
+            // Local list of movies
             ArrayList<Movie> popMovies = new ArrayList<>();
 
             Log.e(TAG, "Response from url: " + jsonStr);
@@ -167,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
             MainActivity.this.mPopMovies.addAll(result);
             MainActivity.this.mAdapter.notifyDataSetChanged();
         }
+
     }
 }
 

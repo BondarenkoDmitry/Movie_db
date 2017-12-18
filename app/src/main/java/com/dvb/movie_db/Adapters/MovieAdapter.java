@@ -19,7 +19,6 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import static android.R.attr.id;
 
 /**
  * Created by dmitrybondarenko on 14.11.17.
@@ -32,7 +31,7 @@ public class MovieAdapter extends RecyclerView.Adapter
     private ArrayList<Movie> mPopMovies = new ArrayList<Movie>();
 
 
-    public MovieAdapter(ArrayList<Movie> arrayList){
+    public MovieAdapter(ArrayList<Movie> arrayList) {
         this.mPopMovies = arrayList;
     }
 
@@ -51,7 +50,7 @@ public class MovieAdapter extends RecyclerView.Adapter
 
         final Movie popMovie = mPopMovies.get(position);
 
-        
+
         holder.title.setText(popMovie.getTitle());
         Picasso.with(holder.itemView.getContext())
                 .load("https://image.tmdb.org/t/p/w185" + popMovie.getPoster_path())
@@ -59,34 +58,32 @@ public class MovieAdapter extends RecyclerView.Adapter
                 .error(R.mipmap.ic_launcher)
                 .into(holder.poster_path);
 
-        holder.itemView.setOnClickListener(new View.OnClickListener(){
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
 
-        public void onClick(View view) {
-            Toast.makeText(view.getContext(), "You've clicked position: "
-                    + position, Toast.LENGTH_SHORT).show();
+            public void onClick(View view) {
+                Toast.makeText(view.getContext(), "You've clicked position: "
+                        + position, Toast.LENGTH_SHORT).show();
 
-            // Start The MovieReview Activity
-            Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);
+                // Start The MovieReview Activity
+                Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);
 
-            // Pass the data (movie id) to the new activity
-            intent.putExtra("MOVIE_ID", popMovie.getId());
+                // Pass the data (movie id) to the new activity
+                intent.putExtra("MOVIE_ID", popMovie.getId());
 
-            view.getContext().startActivity(intent);
+                view.getContext().startActivity(intent);
             }
         });
     }
 
 
-
     @Override
     public int getItemCount() {
-        if (mPopMovies == null){
+        if (mPopMovies == null) {
             return 0;
         }
         return mPopMovies.size();
     }
-
 
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder {
@@ -95,11 +92,11 @@ public class MovieAdapter extends RecyclerView.Adapter
         ImageView poster_path;
         TextView title;
 
-        public RecyclerViewHolder(View view){
+        public RecyclerViewHolder(View view) {
             super(view);
 
-            poster_path = (ImageView)view.findViewById(R.id.img);
-            title = (TextView)view.findViewById(R.id.f_name);
+            poster_path = (ImageView) view.findViewById(R.id.img);
+            title = (TextView) view.findViewById(R.id.f_name);
 
         }
     }

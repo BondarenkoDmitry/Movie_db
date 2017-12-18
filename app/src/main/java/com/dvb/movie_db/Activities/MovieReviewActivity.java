@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.dvb.movie_db.AlertDialogFragment;
 import com.dvb.movie_db.Model.MovieReview;
+
 import com.dvb.movie_db.R;
 import com.dvb.movie_db.RoundedTransformation;
 import com.squareup.okhttp.Call;
@@ -31,6 +32,8 @@ import java.text.DateFormat;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+
+import static android.R.attr.apiKey;
 
 /**
  * Created by dmitrybondarenko on 22.11.17.
@@ -53,14 +56,18 @@ public class MovieReviewActivity extends AppCompatActivity {
         setContentView(R.layout.movie_review);
         ButterKnife.inject(this);
 
-        String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
-        String siteUrl = "https://api.themoviedb.org/3/movie/";
+
+        String SiteURL = "https://api.themoviedb.org/3/movie/";
+        String REVIEWS = "/reviews";
+        String VIDEOS = "/videos";
 
         int movieID = getIntent()
                 .getExtras()
                 .getInt("MOVIE_ID");
 
-        String url = siteUrl + movieID + apiKey;
+        String url = SiteURL + movieID + apiKey;
+        String videoURL = SiteURL + movieID + REVIEWS + apiKey;
+        String reviewsULR = SiteURL + movieID + VIDEOS + apiKey;
 
         if (isNetworkAvailable()){
             OkHttpClient client = new OkHttpClient();
