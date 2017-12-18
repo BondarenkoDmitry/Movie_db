@@ -42,6 +42,12 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 public class MovieReviewActivity extends AppCompatActivity {
 
+    // Interface to change the behavior of the HTTP Request Method
+    // I imagined the end of the request ...
+    interface MoviesRequestInterface {
+        void OnDataAvailable();
+    }
+
     private static final String TAG = MovieReviewActivity.class.getSimpleName();
     private MovieReview mMovieReview;
 
@@ -71,18 +77,38 @@ public class MovieReviewActivity extends AppCompatActivity {
         String videoURL = siteUrl + movieID + REVIEWS + apiKey;
         String reviewsULR = siteUrl + movieID + VIDEOS + apiKey;
 
+        // for url (old code as it was before)
+        makeHttpRequest(url, new MoviesRequestInterface() {
+            @Override
+            public void OnDataAvailable() {
+                updateDisplay();
+            }
+        });
+
+        // for videoURL
+        /* TODO to be adapted
+        makeHttpRequest(videoURL, new MoviesRequestInterface() {
+            @Override
+            public void OnDataAvailable() {
+                updateDisplay();
+            }
+        });*/
+
+        // for reviews URL
+        /* TODO to be adapted
+        makeHttpRequest(reviewsULR, new MoviesRequestInterface() {
+            @Override
+            public void OnDataAvailable() {
+                updateDisplay();
+            }
+        });*/
+    }
+
+    private void makeHttpRequest(String url, final MoviesRequestInterface callback) {
         if (isNetworkAvailable()){
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
-
-//                    .url(videoURL)
-//                    .url(reviewsULR)
-
-//                    It doesn't work this way :(
-//                    But it works when I copy the whole method 3 times.
-//                    Is there any way to refactor it?
-
                     .build();
 
             Call call = client.newCall(request);
@@ -104,20 +130,18 @@ public class MovieReviewActivity extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    updateDisplay();
+                                    callback.OnDataAvailable();
                                 }
                             });
                         } else {
                             alertUserAboutError();
                         }
-
                     }
                     catch (JSONException e){
                         Log.e(TAG, "Exception caught: ", e);
                     }
                 }
             });
-
         }
         else {
             Toast.makeText(this, getString(R.string.network_unavailable_message),
@@ -125,7 +149,7 @@ public class MovieReviewActivity extends AppCompatActivity {
         }
     }
 
-    private void updateDisplay(){
+    private void updateDisplay() {
         mOriginalTitle.setText(mMovieReview.getOriginal_title());
         mOverView.setText(mMovieReview.getOverview());
 
@@ -147,7 +171,6 @@ public class MovieReviewActivity extends AppCompatActivity {
         JSONObject reviewJson = new JSONObject(jsonData);
 
         MovieReview aMovie = new MovieReview();
-
 
         aMovie.setOriginal_title(reviewJson.getString("original_title"));
         aMovie.setPoster_path(reviewJson.getString("poster_path"));
