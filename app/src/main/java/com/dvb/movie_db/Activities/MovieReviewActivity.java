@@ -49,7 +49,8 @@ public class MovieReviewActivity extends AppCompatActivity {
     // Interface to change the behavior of the HTTP Request Method
     // I imagined the end of the request ...
     interface MoviesRequestInterface {
-        void OnDataAvailable();
+        void onDataAvailable();
+        void parseData(String jsonData) throws JSONException;
     }
 
     private static final String TAG = MovieReviewActivity.class.getSimpleName();
@@ -94,15 +95,19 @@ public class MovieReviewActivity extends AppCompatActivity {
                 .getInt("MOVIE_ID");
 
         String url = siteUrl + movieID + apiKey;
-        String videoURL = siteUrl + movieID + REVIEWS + apiKey;
-        String reviewsULR = siteUrl + movieID + VIDEOS + apiKey;
-
+        String videoURL = siteUrl + movieID + VIDEOS + apiKey;
+        String reviewsULR = siteUrl + movieID + REVIEWS + apiKey;
 
         // for url (old code as it was before)
         makeHttpRequest(url, new MoviesRequestInterface() {
             @Override
-            public void OnDataAvailable() {
+            public void onDataAvailable() {
                 updateDisplay();
+            }
+
+            @Override
+            public void parseData(String jsonData) throws JSONException {
+                mMovieDetails = getMovieReviewJson(jsonData);
             }
         });
 
@@ -111,8 +116,12 @@ public class MovieReviewActivity extends AppCompatActivity {
 
         makeHttpRequest(videoURL, new MoviesRequestInterface() {
             @Override
-            public void OnDataAvailable() {
-                updateDisplay();
+            public void onDataAvailable() {
+            }
+
+            @Override
+            public void parseData(String jsonData) {
+
             }
         });
 
@@ -120,8 +129,12 @@ public class MovieReviewActivity extends AppCompatActivity {
 //         TODO to be adapted
         makeHttpRequest(reviewsULR, new MoviesRequestInterface() {
             @Override
-            public void OnDataAvailable() {
-                updateDisplay();
+            public void onDataAvailable() {
+            }
+
+            @Override
+            public void parseData(String jsonData) throws JSONException {
+                getReviewJson(jsonData);
             }
         });
     }
@@ -148,14 +161,11 @@ public class MovieReviewActivity extends AppCompatActivity {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()){
-                            mMovieDetails = getMovieReviewJson(jsonData);
-                            // FIXME fix the code below, data.getJSONArray("results") throws exception as the passed json data is not expected
-                            // getReviewJson(jsonData);
+                            callback.parseData(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    updateDisplay();
-                                    callback.OnDataAvailable();
+                                    callback.onDataAvailable();
                                     myAdapter.notifyDataSetChanged();
                                 }
                             });
