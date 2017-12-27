@@ -5,15 +5,20 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dvb.movie_db.Adapters.ReviewAdapter;
 import com.dvb.movie_db.AlertDialogFragment;
-import com.dvb.movie_db.Model.MovieReview;
+import com.dvb.movie_db.Model.MovieDetails;
 
+import com.dvb.movie_db.Model.Review;
 import com.dvb.movie_db.R;
 import com.dvb.movie_db.RoundedTransformation;
 import com.squareup.okhttp.Call;
@@ -23,18 +28,16 @@ import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.io.StreamCorruptedException;
 import java.text.DateFormat;
+import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
-
-import static android.R.attr.apiKey;
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 /**
  * Created by dmitrybondarenko on 22.11.17.
@@ -42,20 +45,43 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.V;
 
 public class MovieReviewActivity extends AppCompatActivity {
 
+
+    // Interface to change the behavior of the HTTP Request Method
+    // I imagined the end of the request ...
+    interface MoviesRequestInterface {
+        void OnDataAvailable();
+    }
+
     private static final String TAG = MovieReviewActivity.class.getSimpleName();
-    private MovieReview mMovieReview;
+    private MovieDetails mMovieDetails;
+
+    RecyclerView mRecyclerView;
+    RecyclerView.Adapter myAdapter;
+    RecyclerView.LayoutManager mLayoutManger;
+
+    private ArrayList<Review> myReviews = new ArrayList<>();
 
     @InjectView(R.id.mrOriginalTitle)TextView mOriginalTitle;
     @InjectView(R.id.mrOverview)TextView mOverView;
     @InjectView(R.id.mrReleaseDate) TextView mReleaseDate;
     @InjectView(R.id.mrPoster)ImageView mPoster;
     @InjectView(R.id.mrRating) RatingBar mRatingBar;
+    @InjectView(R.id.mrFavB) Button mFavButton;
+    @InjectView(R.id.mrTrailer) TextView mTrailer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.movie_review);
         ButterKnife.inject(this);
+
+        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        myAdapter = new ReviewAdapter(myReviews);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManger = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManger);
+        mRecyclerView.setAdapter(myAdapter);
 
 
         String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
@@ -71,18 +97,40 @@ public class MovieReviewActivity extends AppCompatActivity {
         String videoURL = siteUrl + movieID + REVIEWS + apiKey;
         String reviewsULR = siteUrl + movieID + VIDEOS + apiKey;
 
+
+        // for url (old code as it was before)
+        makeHttpRequest(url, new MoviesRequestInterface() {
+            @Override
+            public void OnDataAvailable() {
+                updateDisplay();
+            }
+        });
+
+//         for videoURL
+//         TODO to be adapted
+
+        makeHttpRequest(videoURL, new MoviesRequestInterface() {
+            @Override
+            public void OnDataAvailable() {
+                updateDisplay();
+            }
+        });
+
+//         for reviews URL
+//         TODO to be adapted
+        makeHttpRequest(reviewsULR, new MoviesRequestInterface() {
+            @Override
+            public void OnDataAvailable() {
+                updateDisplay();
+            }
+        });
+    }
+
+    private void makeHttpRequest(String url, final MoviesRequestInterface callback) {
         if (isNetworkAvailable()){
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.Builder()
                     .url(url)
-
-//                    .url(videoURL)
-//                    .url(reviewsULR)
-
-//                    It doesn't work this way :(
-//                    But it works when I copy the whole method 3 times.
-//                    Is there any way to refactor it?
-
                     .build();
 
             Call call = client.newCall(request);
@@ -100,11 +148,14 @@ public class MovieReviewActivity extends AppCompatActivity {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()){
-                            mMovieReview = getMovieReviewJson(jsonData);
+                            mMovieDetails = getMovieReviewJson(jsonData);
+                            getReviewJson(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     updateDisplay();
+                                    callback.OnDataAvailable();
+                                    myAdapter.notifyDataSetChanged();
                                 }
                             });
                         } else {
@@ -126,28 +177,27 @@ public class MovieReviewActivity extends AppCompatActivity {
     }
 
     private void updateDisplay(){
-        mOriginalTitle.setText(mMovieReview.getOriginal_title());
-        mOverView.setText(mMovieReview.getOverview());
+        mOriginalTitle.setText(mMovieDetails.getOriginal_title());
+        mOverView.setText(mMovieDetails.getOverview());
 
-        if (mMovieReview.getDate() != null){
-            String formattedDate = DateFormat.getDateInstance().format(mMovieReview.getDate());
+        if (mMovieDetails.getDate() != null){
+            String formattedDate = DateFormat.getDateInstance().format(mMovieDetails.getDate());
             mReleaseDate.setText(formattedDate);
         }
 
         Picasso.with(mPoster.getContext())
-                .load("https://image.tmdb.org/t/p/w185" + mMovieReview.getPoster_path())
+                .load("https://image.tmdb.org/t/p/w185" + mMovieDetails.getPoster_path())
                 .transform(new RoundedTransformation(5, 0))
                 .error(R.mipmap.ic_launcher)
                 .into(mPoster);
 
-        mRatingBar.setRating((Integer) mMovieReview.getVote_average());
+        mRatingBar.setRating((Integer) mMovieDetails.getVote_average());
     }
 
-    private MovieReview getMovieReviewJson(String jsonData) throws JSONException {
+    private MovieDetails getMovieReviewJson(String jsonData) throws JSONException {
         JSONObject reviewJson = new JSONObject(jsonData);
 
-        MovieReview aMovie = new MovieReview();
-
+        MovieDetails aMovie = new MovieDetails();
 
         aMovie.setOriginal_title(reviewJson.getString("original_title"));
         aMovie.setPoster_path(reviewJson.getString("poster_path"));
@@ -156,6 +206,21 @@ public class MovieReviewActivity extends AppCompatActivity {
         aMovie.setDate(reviewJson.getString("release_date"));
 
         return aMovie;
+    }
+
+
+    private void getReviewJson(String jsonData) throws JSONException {
+        JSONObject data = new JSONObject(jsonData);
+        JSONArray reviews = data.getJSONArray("results");
+
+        for (int i = 0; i < reviews.length(); i++){
+            JSONObject review = reviews.getJSONObject(i);
+
+            myReviews.add(new Review(
+                    review.getString("author").toString(),
+                    review.getString("content").toString()
+            ));
+        }
     }
 
 
@@ -175,6 +240,16 @@ public class MovieReviewActivity extends AppCompatActivity {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
     }
+
+
+//    sending intent to watch Trailer on Youtube
+
+//    @OnClick (R.id.mrFavB)
+//    public void addToFavs(View view){
+//        Intent intent = new Intent(this, YouTube);
+//        intent.putExtra();
+//        startActivity(intent);
+//    }
 
 }
 

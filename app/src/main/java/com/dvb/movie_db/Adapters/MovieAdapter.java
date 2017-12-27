@@ -62,8 +62,8 @@ public class MovieAdapter extends RecyclerView.Adapter
             @Override
 
             public void onClick(View view) {
-                Toast.makeText(view.getContext(), "You've clicked position: "
-                        + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(view.getContext(), "You've clicked position: "
+//                        + position, Toast.LENGTH_SHORT).show();
 
                 // Start The MovieReview Activity
                 Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);

@@ -14,7 +14,6 @@ public class Movie {
     private String poster_path;
 
 
-
     public Movie(int id, String title, String poster_path) {
 
         this.setId(id);

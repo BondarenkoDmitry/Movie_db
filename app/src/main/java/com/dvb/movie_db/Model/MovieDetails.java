@@ -11,17 +11,19 @@ import java.util.Date;
  * Created by dmitrybondarenko on 22.11.17.
  */
 
-public class MovieReview {
+public class MovieDetails {
 
     private String original_title;
     private String poster_path;
     private String overview;
     private Number vote_average;
 
+
+
     private Date date;
     private String formattedDate;
 
-    public MovieReview(){
+    public MovieDetails(){
         this.setOriginal_title(original_title);
         this.setPoster_path(poster_path);
     };
