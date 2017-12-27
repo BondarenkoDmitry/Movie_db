@@ -55,9 +55,9 @@ public class MovieReviewActivity extends AppCompatActivity {
     private static final String TAG = MovieReviewActivity.class.getSimpleName();
     private MovieDetails mMovieDetails;
 
-    RecyclerView mRecyclerView;
+    RecyclerView myRecyclerView;
     RecyclerView.Adapter myAdapter;
-    RecyclerView.LayoutManager mLayoutManger;
+    RecyclerView.LayoutManager myLayoutManger;
 
     private ArrayList<Review> myReviews = new ArrayList<>();
 
@@ -76,12 +76,12 @@ public class MovieReviewActivity extends AppCompatActivity {
         setContentView(R.layout.movie_review);
         ButterKnife.inject(this);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        myRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         myAdapter = new ReviewAdapter(myReviews);
-        mRecyclerView.setHasFixedSize(true);
-        mLayoutManger = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManger);
-        mRecyclerView.setAdapter(myAdapter);
+        myRecyclerView.setHasFixedSize(true);
+        myLayoutManger = new LinearLayoutManager(this);
+        myRecyclerView.setLayoutManager(myLayoutManger);
+        myRecyclerView.setAdapter(myAdapter);
 
 
         String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
@@ -149,21 +149,23 @@ public class MovieReviewActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()){
                             mMovieDetails = getMovieReviewJson(jsonData);
-                            getReviewJson(jsonData);
+
+//                          getReviewJson(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
                                     updateDisplay();
                                     callback.OnDataAvailable();
                                     myAdapter.notifyDataSetChanged();
+
                                 }
                             });
                         } else {
                             alertUserAboutError();
                         }
-
-                    }
-                    catch (JSONException e){
+                    } catch (IOException e) {
+                        Log.e(TAG, "Exception caught: ", e);
+                    } catch (JSONException e) {
                         Log.e(TAG, "Exception caught: ", e);
                     }
                 }
