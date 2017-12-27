@@ -149,7 +149,8 @@ public class MovieReviewActivity extends AppCompatActivity {
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()){
                             mMovieDetails = getMovieReviewJson(jsonData);
-                            getReviewJson(jsonData);
+                            // FIXME fix the code below, data.getJSONArray("results") throws exception as the passed json data is not expected
+                            // getReviewJson(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
