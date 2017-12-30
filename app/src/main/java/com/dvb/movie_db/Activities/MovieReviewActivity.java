@@ -20,6 +20,7 @@ import com.dvb.movie_db.AlertDialogFragment;
 import com.dvb.movie_db.Model.MovieDetails;
 
 import com.dvb.movie_db.Model.Review;
+import com.dvb.movie_db.Model.Video;
 import com.dvb.movie_db.R;
 import com.dvb.movie_db.RoundedTransformation;
 import com.squareup.okhttp.Call;
@@ -74,7 +75,7 @@ public class MovieReviewActivity extends AppCompatActivity {
     @InjectView(R.id.mrPoster)ImageView mPoster;
     @InjectView(R.id.mrRating) RatingBar mRatingBar;
     @InjectView(R.id.mrFavB) Button mFavButton;
-    @InjectView(R.id.mrTrailer) TextView mTrailer;
+
 
 
     @Override
