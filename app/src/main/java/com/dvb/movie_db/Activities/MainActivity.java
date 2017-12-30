@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        mRecyclerView = (RecyclerView) findViewById(R.id.review_recycler_view);
         mAdapter = new MovieAdapter(mPopMovies);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new GridLayoutManager(this, 3);

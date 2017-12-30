@@ -15,10 +15,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dvb.movie_db.Adapters.ReviewAdapter;
+import com.dvb.movie_db.Adapters.VideoAdapter;
 import com.dvb.movie_db.AlertDialogFragment;
 import com.dvb.movie_db.Model.MovieDetails;
 
 import com.dvb.movie_db.Model.Review;
+import com.dvb.movie_db.Model.Video;
 import com.dvb.movie_db.R;
 import com.dvb.movie_db.RoundedTransformation;
 import com.squareup.okhttp.Call;
@@ -49,17 +51,23 @@ public class MovieReviewActivity extends AppCompatActivity {
     // Interface to change the behavior of the HTTP Request Method
     // I imagined the end of the request ...
     interface MoviesRequestInterface {
-        void OnDataAvailable();
+        void onDataAvailable();
+        void parseData(String jsonData) throws JSONException;
     }
 
     private static final String TAG = MovieReviewActivity.class.getSimpleName();
     private MovieDetails mMovieDetails;
+
+    RecyclerView miRecyclerView;
+    RecyclerView.Adapter miAdapter;
+    RecyclerView.LayoutManager miLayoutManger;
 
     RecyclerView myRecyclerView;
     RecyclerView.Adapter myAdapter;
     RecyclerView.LayoutManager myLayoutManger;
 
     private ArrayList<Review> myReviews = new ArrayList<>();
+    private ArrayList<Video> miVideos = new ArrayList<>();
 
     @InjectView(R.id.mrOriginalTitle)TextView mOriginalTitle;
     @InjectView(R.id.mrOverview)TextView mOverView;
@@ -67,7 +75,6 @@ public class MovieReviewActivity extends AppCompatActivity {
     @InjectView(R.id.mrPoster)ImageView mPoster;
     @InjectView(R.id.mrRating) RatingBar mRatingBar;
     @InjectView(R.id.mrFavB) Button mFavButton;
-    @InjectView(R.id.mrTrailer) TextView mTrailer;
 
 
     @Override
@@ -76,7 +83,15 @@ public class MovieReviewActivity extends AppCompatActivity {
         setContentView(R.layout.movie_review);
         ButterKnife.inject(this);
 
-        myRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+
+        miRecyclerView = (RecyclerView) findViewById(R.id.video_recycler_view);
+        miAdapter = new VideoAdapter(miVideos);
+        miRecyclerView.setHasFixedSize(true);
+        miLayoutManger = new LinearLayoutManager(this);
+        miRecyclerView.setLayoutManager(miLayoutManger);
+        miRecyclerView.setAdapter(miAdapter);
+
+        myRecyclerView = (RecyclerView) findViewById(R.id.review_recycler_view);
         myAdapter = new ReviewAdapter(myReviews);
         myRecyclerView.setHasFixedSize(true);
         myLayoutManger = new LinearLayoutManager(this);
@@ -94,15 +109,19 @@ public class MovieReviewActivity extends AppCompatActivity {
                 .getInt("MOVIE_ID");
 
         String url = siteUrl + movieID + apiKey;
-        String videoURL = siteUrl + movieID + REVIEWS + apiKey;
-        String reviewsULR = siteUrl + movieID + VIDEOS + apiKey;
+        String videoURL = siteUrl + movieID + VIDEOS + apiKey;
+        String reviewsULR = siteUrl + movieID + REVIEWS + apiKey;
 
 
-        // for url (old code as it was before)
         makeHttpRequest(url, new MoviesRequestInterface() {
             @Override
-            public void OnDataAvailable() {
+            public void onDataAvailable() {
                 updateDisplay();
+            }
+
+            @Override
+            public void parseData(String jsonData) throws JSONException {
+                mMovieDetails = getMovieReviewJson(jsonData);
             }
         });
 
@@ -111,20 +130,29 @@ public class MovieReviewActivity extends AppCompatActivity {
 
         makeHttpRequest(videoURL, new MoviesRequestInterface() {
             @Override
-            public void OnDataAvailable() {
-                updateDisplay();
+            public void onDataAvailable() {
+            }
+
+            @Override
+            public void parseData(String jsonData) throws JSONException{
+                getVideoJson(jsonData);
             }
         });
 
 //         for reviews URL
-//         TODO to be adapted
         makeHttpRequest(reviewsULR, new MoviesRequestInterface() {
             @Override
-            public void OnDataAvailable() {
-                updateDisplay();
+            public void onDataAvailable() {
+            }
+
+            @Override
+            public void parseData(String jsonData) throws JSONException {
+                getReviewJson(jsonData);
             }
         });
     }
+
+
 
     private void makeHttpRequest(String url, final MoviesRequestInterface callback) {
         if (isNetworkAvailable()){
@@ -148,16 +176,12 @@ public class MovieReviewActivity extends AppCompatActivity {
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
                         if (response.isSuccessful()){
-                            mMovieDetails = getMovieReviewJson(jsonData);
-
-//                          getReviewJson(jsonData);
+                            callback.parseData(jsonData);
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    updateDisplay();
-                                    callback.OnDataAvailable();
+                                    callback.onDataAvailable();
                                     myAdapter.notifyDataSetChanged();
-
                                 }
                             });
                         } else {
@@ -222,6 +246,20 @@ public class MovieReviewActivity extends AppCompatActivity {
                     review.getString("author").toString(),
                     review.getString("content").toString()
             ));
+        }
+    }
+
+    private void getVideoJson(String jsonData) throws JSONException {
+        JSONObject data = new JSONObject(jsonData);
+        JSONArray videos = data.getJSONArray("results");
+
+        for (int i = 0; i < videos.length(); i++){
+            JSONObject video = videos.getJSONObject(i);
+            miVideos.add(new Video(
+                    video.getString("site").toString(),
+                    video.getString("key").toString()
+            ));
+
         }
     }
 
