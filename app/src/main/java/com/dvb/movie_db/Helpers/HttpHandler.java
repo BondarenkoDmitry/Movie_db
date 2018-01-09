@@ -1,4 +1,4 @@
-package com.dvb.movie_db;
+package com.dvb.movie_db.Helpers;
 
 import android.util.Log;
 

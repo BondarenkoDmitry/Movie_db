@@ -1,7 +1,6 @@
-package com.dvb.movie_db.Model;
+package com.dvb.movie_db.Models;
 
 import android.util.Log;
-import android.view.View;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

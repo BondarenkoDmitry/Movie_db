@@ -11,8 +11,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.dvb.movie_db.Adapters.MovieAdapter;
-import com.dvb.movie_db.HttpHandler;
-import com.dvb.movie_db.Model.Movie;
+import com.dvb.movie_db.Helpers.HttpHandler;
+import com.dvb.movie_db.Models.Movie;
 import com.dvb.movie_db.R;
 
 

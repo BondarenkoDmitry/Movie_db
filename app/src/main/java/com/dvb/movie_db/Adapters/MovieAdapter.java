@@ -2,19 +2,17 @@ package com.dvb.movie_db.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dvb.movie_db.Activities.MovieReviewActivity;
-import com.dvb.movie_db.Model.Movie;
+import com.dvb.movie_db.Models.Movie;
 import com.dvb.movie_db.R;
-import com.dvb.movie_db.RoundedTransformation;
+import com.dvb.movie_db.Helpers.RoundedTransformation;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

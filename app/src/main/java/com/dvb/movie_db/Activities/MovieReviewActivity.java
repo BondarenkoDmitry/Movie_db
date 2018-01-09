@@ -16,13 +16,13 @@ import android.widget.Toast;
 
 import com.dvb.movie_db.Adapters.ReviewAdapter;
 import com.dvb.movie_db.Adapters.VideoAdapter;
-import com.dvb.movie_db.AlertDialogFragment;
-import com.dvb.movie_db.Model.MovieDetails;
+import com.dvb.movie_db.Helpers.AlertDialogFragment;
+import com.dvb.movie_db.Models.MovieDetails;
 
-import com.dvb.movie_db.Model.Review;
-import com.dvb.movie_db.Model.Video;
+import com.dvb.movie_db.Models.Review;
+import com.dvb.movie_db.Models.Video;
 import com.dvb.movie_db.R;
-import com.dvb.movie_db.RoundedTransformation;
+import com.dvb.movie_db.Helpers.RoundedTransformation;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.Callback;
 import com.squareup.okhttp.OkHttpClient;
@@ -48,8 +48,7 @@ import butterknife.InjectView;
 public class MovieReviewActivity extends AppCompatActivity {
 
 
-    // Interface to change the behavior of the HTTP Request Method
-    // I imagined the end of the request ...
+
     interface MoviesRequestInterface {
         void onDataAvailable();
         void parseData(String jsonData) throws JSONException;
@@ -126,9 +125,8 @@ public class MovieReviewActivity extends AppCompatActivity {
             }
         });
 
-//         for videoURL
-//         TODO to be adapted
 
+//         for videoURL
         makeHttpRequest(videoURL, new MoviesRequestInterface() {
             @Override
             public void onDataAvailable() {

@@ -1,10 +1,12 @@
-package com.dvb.movie_db;
+package com.dvb.movie_db.Helpers;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import com.dvb.movie_db.R;
 
 /**
  * Created by dmitrybondarenko on 24.11.17.

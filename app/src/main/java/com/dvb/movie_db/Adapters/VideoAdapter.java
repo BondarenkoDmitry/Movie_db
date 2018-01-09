@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.dvb.movie_db.Model.Video;
+import com.dvb.movie_db.Models.Video;
 import com.dvb.movie_db.R;
 
 import java.util.ArrayList;

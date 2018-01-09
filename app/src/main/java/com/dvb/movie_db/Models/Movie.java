@@ -1,6 +1,4 @@
-package com.dvb.movie_db.Model;
-
-import static android.R.attr.id;
+package com.dvb.movie_db.Models;
 
 /**
  * Created by dmitrybondarenko on 14.11.17.
