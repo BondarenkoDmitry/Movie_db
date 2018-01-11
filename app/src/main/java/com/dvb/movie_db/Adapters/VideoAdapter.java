@@ -29,7 +29,7 @@ public class VideoAdapter extends RecyclerView.Adapter
     @Override
     public RecyclerViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.video_item, parent, false);
+                .inflate(R.layout.review_video_item, parent, false);
 
         RecyclerViewHolder recyclerViewHolder = new RecyclerViewHolder(view);
         return recyclerViewHolder;

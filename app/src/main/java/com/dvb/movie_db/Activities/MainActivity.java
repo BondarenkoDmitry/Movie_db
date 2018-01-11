@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
     String topRated = "top_rated";
 
 
-
     RecyclerView mRecyclerView;
     RecyclerView.Adapter mAdapter;
     RecyclerView.LayoutManager mLayoutManager;

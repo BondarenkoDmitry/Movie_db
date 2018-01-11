@@ -20,6 +20,10 @@
             </intent-filter>
         </activity>
     <activity android:name=".Activities.MovieReviewActivity" />
+        <provider
+            android:authorities="com.dvb.movie_db"
+            android:name=".Data.MovieProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
