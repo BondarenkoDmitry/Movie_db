@@ -19,7 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-    <activity android:name=".Activities.MovieReviewActivity" />
+
+        <activity android:name=".Activities.MovieReviewActivity" />
+        <activity android:name=".Activities.CatalogActivity" />
+
         <provider
             android:authorities="com.dvb.movie_db"
             android:name=".Data.MovieProvider"

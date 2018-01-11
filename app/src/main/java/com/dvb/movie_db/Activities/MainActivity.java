@@ -1,5 +1,6 @@
 package com.dvb.movie_db.Activities;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.dvb.movie_db.Adapters.MovieAdapter;
@@ -70,17 +72,17 @@ public class MainActivity extends AppCompatActivity {
                 this.mAdapter.notifyDataSetChanged();
 
                 // Pass the part of the url to the async task
-
                 new FetchMovies().execute(popular);
                 return true;
+
 
             case R.id.upcoming_movies:
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
-       // Pass the part of the url to the async task
 
                 new FetchMovies().execute(upcoming);
                 return true;
+
 
             case R.id.top_rated:
                 this.mPopMovies.clear();
@@ -89,12 +91,13 @@ public class MainActivity extends AppCompatActivity {
                 new FetchMovies().execute(topRated);
                 return true;
 
+
             case R.id.my_movies:
                 this.mPopMovies.clear();
                 this.mAdapter.notifyDataSetChanged();
-                // Pass the part of the url to the async task
-                new FetchMovies().execute(topRated);
 
+                Intent intent = new Intent(MainActivity.this, CatalogActivity.class);
+                this.startActivity(intent);
                 return true;
         }
 
