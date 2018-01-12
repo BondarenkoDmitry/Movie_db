@@ -9,8 +9,8 @@
     <string name="error_ok_button_text">OK</string>
     <string name="network_unavailable_message">Network is gone!</string>
     <string name="my_movies">My Movies</string>
-
-
+    <string name="add_dummy">Add dummy</string>
+    <string name="delete_all">Delete all</string>
 
 
 </resources>

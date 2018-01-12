@@ -13,7 +13,4 @@
         android:stackFromBottom="false"
         android:transcriptMode="alwaysScroll"/>
 
-
-
-
 </RelativeLayout>
