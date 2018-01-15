@@ -1,13 +1,18 @@
 package com.dvb.movie_db.Activities;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -16,6 +21,7 @@ import android.widget.Toast;
 
 import com.dvb.movie_db.Adapters.ReviewAdapter;
 import com.dvb.movie_db.Adapters.VideoAdapter;
+import com.dvb.movie_db.Data.MovieContract;
 import com.dvb.movie_db.Helpers.AlertDialogFragment;
 import com.dvb.movie_db.Models.MovieDetails;
 
@@ -40,6 +46,7 @@ import java.util.ArrayList;
 
 import butterknife.ButterKnife;
 import butterknife.InjectView;
+import butterknife.OnClick;
 
 /**
  * Created by dmitrybondarenko on 22.11.17.
@@ -75,7 +82,7 @@ public class MovieReviewActivity extends AppCompatActivity {
     @InjectView(R.id.mrRating) RatingBar mRatingBar;
     @InjectView(R.id.mrFavB) Button mFavButton;
 
-
+    private Uri mCurrentMovieUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -219,6 +226,37 @@ public class MovieReviewActivity extends AppCompatActivity {
         mRatingBar.setRating((Integer) mMovieDetails.getVote_average());
     }
 
+
+
+// Do I need this method at all???
+
+//    private void saveMovie() {
+//        String nameString = mOriginalTitle.getText().toString().trim();
+//        String overviewString = mOverView.getText().toString().trim();
+//        String releaseString = mReleaseDate.getText().toString().trim();
+//    }
+
+    private void saveJsonMovie(){
+        String jName = mMovieDetails.getOriginal_title();
+        String jPoster = mMovieDetails.getPoster_path();
+        String jOverview = mMovieDetails.getOverview();
+        String jDate = String.valueOf(mMovieDetails.getDate());
+        Number jRating = mMovieDetails.getVote_average();
+
+
+        ContentValues values = new ContentValues();
+
+        values.put(MovieContract.MovieEntry.COLUMN_FILM_NAME, jName);
+        values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, jPoster);
+        values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, jOverview);
+        values.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, jDate);
+        values.put(MovieContract.MovieEntry.COLUMN_RATING, (Integer) jRating);
+
+        Uri newUri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values);
+    }
+
+
+
     private MovieDetails getMovieReviewJson(String jsonData) throws JSONException {
         JSONObject reviewJson = new JSONObject(jsonData);
 
@@ -281,14 +319,15 @@ public class MovieReviewActivity extends AppCompatActivity {
     }
 
 
-//    sending intent to watch Trailer on Youtube
+    @OnClick(R.id.mrFavB)
+    public void addToFavs(View view){
+        saveJsonMovie();
+        Toast.makeText(this, "This movie has been added to your FAV.list",
+                Toast.LENGTH_SHORT).show();
+    }
 
-//    @OnClick (R.id.mrFavB)
-//    public void addToFavs(View view){
-//        Intent intent = new Intent(this, YouTube);
-//        intent.putExtra();
-//        startActivity(intent);
-//    }
+
+//    sending intent to watch Trailer on Youtube
 
 }
 

@@ -18,7 +18,6 @@ public class MovieDetails {
     private Number vote_average;
 
 
-
     private Date date;
     private String formattedDate;
 

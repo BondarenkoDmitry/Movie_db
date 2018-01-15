@@ -50,7 +50,9 @@ public class MovieCursorAdapter extends CursorAdapter {
         String moviePoster = cursor.getString(posterColumnIndex);
         String movieRelease = cursor.getString(releaseColumnIndex);
         String movieOverview = cursor.getString(overviewColumnIndex);
-        String movieRating = cursor.getString(ratingColumnIndex);
+//        I really have doubts about Int
+        Number movieRating = cursor.getInt(ratingColumnIndex);
+
 
 
         aTitle.setText(movieTitle);
