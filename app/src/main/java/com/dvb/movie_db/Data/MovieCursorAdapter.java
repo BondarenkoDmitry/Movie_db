@@ -62,8 +62,7 @@ public class MovieCursorAdapter extends CursorAdapter {
         aReleaseDate.setText(movieRelease);
         aOverview.setText(movieOverview);
 
-        //I don't know how fix this one.
-//        aRating.setRating(movieRating);
+        aRating.setRating(movieRating.floatValue());
 
     }
 }

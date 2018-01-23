@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.dvb.movie_db.Data.MovieContract;
 import com.dvb.movie_db.Data.MovieCursorAdapter;
@@ -24,12 +25,14 @@ public class CatalogActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int MOVIE_LOADER = 0;
-    MovieCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sql_catalog_activity);
+
+        // Initialize the loader
+        getSupportLoaderManager().initLoader(1, null, this);
     }
 
     private void insertDummyMovie(){
@@ -72,12 +75,14 @@ public class CatalogActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCursorAdapter.swapCursor(data);
+        // Initialize the ListView
+        ListView lvItems = (ListView) findViewById(R.id.sqList);
+        MovieCursorAdapter adapter = new MovieCursorAdapter(this, data);
+        lvItems.setAdapter(adapter);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
     }
 
     @Override
