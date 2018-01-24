@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.dvb.movie_db.Data.MovieContract;
 import com.dvb.movie_db.Data.MovieCursorAdapter;
@@ -62,10 +63,6 @@ public class CatalogActivity extends AppCompatActivity implements
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 //        mCursorAdapter.swapCursor(data);
-        ListView lvItems = (ListView) findViewById(R.id.sqList);
-        MovieCursorAdapter adapter = new MovieCursorAdapter(this, data);
-        lvItems.setAdapter(adapter);
-        // Initialize the ListView
         ListView lvItems = (ListView) findViewById(R.id.sqList);
         MovieCursorAdapter adapter = new MovieCursorAdapter(this, data);
         lvItems.setAdapter(adapter);
