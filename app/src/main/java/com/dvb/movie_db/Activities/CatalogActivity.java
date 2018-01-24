@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 
 import com.dvb.movie_db.Data.MovieContract;
 import com.dvb.movie_db.Data.MovieCursorAdapter;
@@ -35,12 +34,10 @@ public class CatalogActivity extends AppCompatActivity implements
         getSupportLoaderManager().initLoader(1, null, this);
     }
 
-
     private void deleteAllMovies(){
         int rowsDeleted = getContentResolver().delete(
                 MovieContract.MovieEntry.CONTENT_URI, null, null);
         Log.v("CatalogActivity ", rowsDeleted + " rows deleted from body database");
-
     }
 
     @Override
@@ -68,6 +65,10 @@ public class CatalogActivity extends AppCompatActivity implements
         ListView lvItems = (ListView) findViewById(R.id.sqList);
         MovieCursorAdapter adapter = new MovieCursorAdapter(this, data);
         lvItems.setAdapter(adapter);
+        // Initialize the ListView
+        ListView lvItems = (ListView) findViewById(R.id.sqList);
+        MovieCursorAdapter adapter = new MovieCursorAdapter(this, data);
+        lvItems.setAdapter(adapter);
     }
 
     @Override
@@ -92,7 +93,6 @@ public class CatalogActivity extends AppCompatActivity implements
             case R.id.action_delete_all_entries:
                 deleteAllMovies();
                 return true;
-
         }
         return super.onOptionsItemSelected(item);
     }
