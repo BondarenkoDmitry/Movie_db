@@ -10,7 +10,7 @@
         android:id="@+id/sqList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:stackFromBottom="false"
-        android:transcriptMode="alwaysScroll"/>
+        android:stackFromBottom="true"
+        android:transcriptMode="normal"/>
 
 </RelativeLayout>

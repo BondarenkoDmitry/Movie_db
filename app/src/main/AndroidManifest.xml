@@ -12,16 +12,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+
         <activity android:name=".Activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
 
-        <activity android:name=".Activities.MovieReviewActivity" />
-        <activity android:name=".Activities.CatalogActivity" />
+
+        <activity
+            android:name=".Activities.MovieReviewActivity"
+            android:label="Movie_Name"
+            android:parentActivityName=".Activities.MainActivity"
+            android:screenOrientation="portrait"/>
+
+
+        <activity
+            android:name=".Activities.CatalogActivity"
+            android:label="I'll watch list"
+            android:parentActivityName=".Activities.MainActivity"/>
+
 
         <provider
             android:authorities="com.dvb.movie_db"

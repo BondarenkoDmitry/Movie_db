@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.dvb.movie_db.Data.MovieContract;
 import com.dvb.movie_db.Data.MovieCursorAdapter;
@@ -24,31 +25,22 @@ public class CatalogActivity extends AppCompatActivity implements
         LoaderManager.LoaderCallbacks<Cursor>{
 
     private static final int MOVIE_LOADER = 0;
-    MovieCursorAdapter mCursorAdapter;
+//    MovieCursorAdapter mCursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sql_catalog_activity);
+
+        getSupportLoaderManager().initLoader(1, null, this);
     }
 
-    private void insertDummyMovie(){
-
-        ContentValues values = new ContentValues();
-
-            values.put(MovieContract.MovieEntry.COLUMN_FILM_NAME, "WOW Movie");
-            values.put(MovieContract.MovieEntry.COLUMN_POSTER_PATH, "find_this_poster");
-            values.put(MovieContract.MovieEntry.COLUMN_OVERVIEW, "That's a nice WOW movie");
-            values.put(MovieContract.MovieEntry.COLUMN_RELEASE_DATE, "12.07.1986");
-            values.put(MovieContract.MovieEntry.COLUMN_RATING, 9);
-
-        Uri newUri = getContentResolver().insert(MovieContract.MovieEntry.CONTENT_URI, values);
-    }
 
     private void deleteAllMovies(){
         int rowsDeleted = getContentResolver().delete(
                 MovieContract.MovieEntry.CONTENT_URI, null, null);
         Log.v("CatalogActivity ", rowsDeleted + " rows deleted from body database");
+
     }
 
     @Override
@@ -72,12 +64,15 @@ public class CatalogActivity extends AppCompatActivity implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mCursorAdapter.swapCursor(data);
+//        mCursorAdapter.swapCursor(data);
+        ListView lvItems = (ListView) findViewById(R.id.sqList);
+        MovieCursorAdapter adapter = new MovieCursorAdapter(this, data);
+        lvItems.setAdapter(adapter);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mCursorAdapter.swapCursor(null);
+//        mCursorAdapter.swapCursor(null);
     }
 
     @Override
@@ -93,13 +88,11 @@ public class CatalogActivity extends AppCompatActivity implements
         // User clicked on a menu option in the app bar overflow menu
         switch (item.getItemId()) {
 
-            case R.id.action_insert_dummy_data:
-                insertDummyMovie();
-                return true;
 
             case R.id.action_delete_all_entries:
                 deleteAllMovies();
                 return true;
+
         }
         return super.onOptionsItemSelected(item);
     }

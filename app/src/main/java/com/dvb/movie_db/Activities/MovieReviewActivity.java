@@ -87,6 +87,7 @@ public class MovieReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setTitle(mMovieDetails.getOriginal_title());
         setContentView(R.layout.review_main_movie);
         ButterKnife.inject(this);
 
