@@ -229,14 +229,6 @@ public class MovieReviewActivity extends AppCompatActivity {
 
 
 
-// Do I need this method at all???
-
-//    private void saveMovie() {
-//        String nameString = mOriginalTitle.getText().toString().trim();
-//        String overviewString = mOverView.getText().toString().trim();
-//        String releaseString = mReleaseDate.getText().toString().trim();
-//    }
-
     private void saveJsonMovie(){
         String jName = mMovieDetails.getOriginal_title();
         String jPoster = mMovieDetails.getPoster_path();

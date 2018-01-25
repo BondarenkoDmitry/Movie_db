@@ -66,7 +66,7 @@
         android:layout_below="@+id/sqPoster"/>
 
     <Button
-        android:id="@+id/sqFavB"
+        android:id="@+id/sqDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/sqRating"

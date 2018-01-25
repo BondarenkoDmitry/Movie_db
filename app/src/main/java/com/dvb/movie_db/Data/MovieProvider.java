@@ -74,25 +74,14 @@ public class MovieProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Can't query unknown URI " + uri);
         }
+
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
+
         return cursor;
     }
 
 
 
-
-    @Override
-    public String getType(Uri uri) {
-        final int match = sUriMatcher.match(uri);
-        switch (match){
-            case MOVIES:
-                return MovieContract.MovieEntry.CONTENT_LIST_TYPE;
-            case MOVIE_ID:
-                return MovieContract.MovieEntry.CONTENT_LIST_TYPE;
-            default:
-                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
-        }
-    }
 
 
     @Override
@@ -142,6 +131,8 @@ public class MovieProvider extends ContentProvider {
             return null;
         }
 
+        getContext().getContentResolver().notifyChange(uri, null);
+
         return ContentUris.withAppendedId(uri, id);
     }
 
@@ -157,16 +148,42 @@ public class MovieProvider extends ContentProvider {
     public int delete(Uri uri, String selection, String[] selectionArgs) {
         SQLiteDatabase database = mDbHelper.getWritableDatabase();
 
+        int rowsDeleted;
+        final int match = sUriMatcher.match(uri);
+
+        switch (match){
+            case MOVIES:
+//                Delete all movies
+                return database.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
+            case MOVIE_ID:
+                // Delete a single movie
+                selection = MovieContract.MovieEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rowsDeleted = database.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+        }
+
+
+        if (rowsDeleted != 0) {
+            getContext().getContentResolver().notifyChange(uri, null);
+        }
+
+        return rowsDeleted;
+    }
+
+
+    @Override
+    public String getType(Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match){
             case MOVIES:
-                return database.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
+                return MovieContract.MovieEntry.CONTENT_LIST_TYPE;
             case MOVIE_ID:
-                selection = MovieContract.MovieEntry._ID + "=?";
-                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
-                return database.delete(MovieContract.MovieEntry.TABLE_NAME, selection, selectionArgs);
+                return MovieContract.MovieEntry.CONTENT_LIST_TYPE;
             default:
-                throw new IllegalArgumentException("Deletion is not supported for " + uri);
+                throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
         }
     }
 }
