@@ -14,6 +14,7 @@ import com.dvb.movie_db.R;
 
 import java.util.ArrayList;
 
+import static android.R.attr.content;
 import static android.R.attr.key;
 
 /**
@@ -48,11 +49,14 @@ public class VideoAdapter extends RecyclerView.Adapter
         holder.site.setText(aVideo.getSite());
         holder.key.setText(aVideo.getKey());
 
-        holder.site.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                        Uri.parse("http://www.youtube.com/watch?v=" + key));
+
+                // This code makes a mistake. Why?
+
+                Intent webIntent = new Intent(Intent.ACTION_VIEW);
+                webIntent.setData(Uri.parse("http://www.youtube.com/watch?v=" + key));
                 context.startActivity(webIntent);
             }
         });

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dvb.movie_db.Activities.MovieReviewActivity;
 import com.dvb.movie_db.Models.Movie;
@@ -43,11 +44,10 @@ public class MovieAdapter extends RecyclerView.Adapter
         return recyclerViewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, final int position) {
-
         final Movie popMovie = mPopMovies.get(position);
-
 
         holder.title.setText(popMovie.getTitle());
         Picasso.with(holder.itemView.getContext())
@@ -58,10 +58,8 @@ public class MovieAdapter extends RecyclerView.Adapter
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
-
             public void onClick(View view) {
-//                Toast.makeText(view.getContext(), "You've clicked position: "
-//                        + position, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(view.getContext(), "You've clicked position: " + position, Toast.LENGTH_SHORT).show();
 
                 // Start The MovieReview Activity
                 Intent intent = new Intent(view.getContext(), MovieReviewActivity.class);
