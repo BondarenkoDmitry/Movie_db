@@ -1,9 +1,11 @@
 package com.dvb.movie_db.Adapters;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import com.dvb.movie_db.R;
 import java.util.ArrayList;
 
 import static android.R.attr.content;
+import static android.R.attr.id;
 import static android.R.attr.key;
 
 /**
@@ -44,20 +47,24 @@ public class VideoAdapter extends RecyclerView.Adapter
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-        Video aVideo = miVideos.get(position);
+        final Video aVideo = miVideos.get(position);
 
         holder.site.setText(aVideo.getSite());
-        holder.key.setText(aVideo.getKey());
+        holder.videoKey.setText(aVideo.getKey());
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                // This code makes a mistake. Why?
+                String videoKey = aVideo.getKey();
+                String youtube = "https://www.youtube.com/watch?v=";
 
-                Intent webIntent = new Intent(Intent.ACTION_VIEW);
-                webIntent.setData(Uri.parse("http://www.youtube.com/watch?v=" + key));
-                context.startActivity(webIntent);
+
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(youtube + videoKey));
+                view.getContext().startActivity(intent);
+
             }
         });
 
@@ -76,14 +83,14 @@ public class VideoAdapter extends RecyclerView.Adapter
 
     public static class RecyclerViewHolder extends RecyclerView.ViewHolder{
 
-        TextView site;
-        TextView key;
+        private TextView site;
+        private TextView videoKey;
 
         public RecyclerViewHolder(View view){
             super(view);
 
             site = (TextView)view.findViewById(R.id.idSite);
-            key = (TextView)view.findViewById(R.id.idKey);
+            videoKey = (TextView)view.findViewById(R.id.idKey);
         }
     }
 }
