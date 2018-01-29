@@ -11,6 +11,11 @@
     <string name="my_movies">My Movies</string>
     <string name="add_dummy">Add dummy</string>
     <string name="delete_all">Delete all</string>
+    <string name="json_down">Json Data is downloading</string>
+    <string name="response_from_url">Response from url:</string>
+    <string name="json_parsing_error">Json parsing error:</string>
+    <string name="couldnt_get_json">Couldn\'t get json from server.</string>
+    <string name="couldnt_get_json_possible_errors">Couldn\'t get json from server. Check LogCat for possible errors!</string>
 
 
 </resources>

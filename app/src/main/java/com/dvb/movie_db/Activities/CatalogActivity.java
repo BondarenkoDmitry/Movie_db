@@ -1,6 +1,7 @@
 package com.dvb.movie_db.Activities;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.dvb.movie_db.Data.MovieContract;
@@ -35,11 +37,7 @@ public class CatalogActivity extends AppCompatActivity implements
         getSupportLoaderManager().initLoader(1, null, this);
     }
 
-    private void deleteAllMovies(){
-        int rowsDeleted = getContentResolver().delete(
-                MovieContract.MovieEntry.CONTENT_URI, null, null);
-        Log.v("CatalogActivity ", rowsDeleted + " rows deleted from body database");
-    }
+
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
@@ -93,6 +91,20 @@ public class CatalogActivity extends AppCompatActivity implements
         }
         return super.onOptionsItemSelected(item);
     }
+
+
+
+    private void deleteAllMovies(){
+        int rowsDeleted = getContentResolver().delete(
+                MovieContract.MovieEntry.CONTENT_URI, null, null);
+        Log.v("CatalogActivity ", rowsDeleted + " rows deleted from body database");
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
+    }
+
 }
 
 

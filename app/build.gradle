@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 
-def MDB_API_KEY = '"MDB_API_key"';
+def MDB_API_KEY = '"?api_key=957c988676c0d274a6d1cc76dd5c8a93"';
 
 
 android {
@@ -40,7 +40,5 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp:okhttp:2.1.0'
     compile 'com.jakewharton:butterknife:6.0.0'
-
-
 
 }

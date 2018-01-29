@@ -56,7 +56,6 @@ import butterknife.OnClick;
 public class MovieReviewActivity extends AppCompatActivity {
 
 
-
     interface MoviesRequestInterface {
         void onDataAvailable();
         void parseData(String jsonData) throws JSONException;

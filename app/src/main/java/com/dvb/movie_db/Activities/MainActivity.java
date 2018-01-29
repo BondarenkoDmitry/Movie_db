@@ -112,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         protected void onPreExecute() {
             super.onPreExecute();
             Toast.makeText(MainActivity.this,
-                    "Json Data is downloading", Toast.LENGTH_SHORT).show();
+                    R.string.json_down, Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
             // Local list of movies
             ArrayList<Movie> popMovies = new ArrayList<>();
 
-            Log.e(TAG, "Response from url: " + jsonStr);
+            Log.e(TAG, getString(R.string.response_from_url) + jsonStr);
             if (jsonStr != null) {
                 try {
                     JSONObject jsonObj = new JSONObject(jsonStr);
@@ -146,24 +146,24 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                 } catch (final JSONException e) {
-                    Log.e(TAG, "Json parsing error: " + e.getMessage());
+                    Log.e(TAG, getString(R.string.json_parsing_error) + e.getMessage());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             Toast.makeText(getApplicationContext(),
-                                    "Json parsing error: " + e.getMessage(),
+                                    R.string.json_parsing_error + e.getMessage(),
                                     Toast.LENGTH_LONG).show();
                         }
                     });
                 }
 
             } else {
-                Log.e(TAG, "Couldn't get json from server.");
+                Log.e(TAG, getString(R.string.couldnt_get_json));
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Toast.makeText(getApplicationContext(),
-                                "Couldn't get json from server. Check LogCat for possible errors!",
+                                R.string.couldnt_get_json_possible_errors,
                                 Toast.LENGTH_LONG).show();
                     }
                 });
