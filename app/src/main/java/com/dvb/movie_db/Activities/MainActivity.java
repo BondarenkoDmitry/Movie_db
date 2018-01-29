@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.dvb.movie_db.Adapters.MovieAdapter;
+import com.dvb.movie_db.BuildConfig;
 import com.dvb.movie_db.Helpers.HttpHandler;
 import com.dvb.movie_db.Models.Movie;
 import com.dvb.movie_db.R;
@@ -26,7 +27,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
+
+    String apiKey = BuildConfig.MDB_API_KEY;
     String siteUrl = "https://api.themoviedb.org/3/movie/";
     String popular = "popular";
     String upcoming = "upcoming";
@@ -116,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected ArrayList<Movie> doInBackground(String... arg0) {
             HttpHandler sh = new HttpHandler();
-
 
             final String url = siteUrl + arg0[0] + apiKey;
 

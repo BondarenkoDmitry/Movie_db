@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.dvb.movie_db.Adapters.ReviewAdapter;
 import com.dvb.movie_db.Adapters.VideoAdapter;
+import com.dvb.movie_db.BuildConfig;
 import com.dvb.movie_db.Data.MovieContract;
 import com.dvb.movie_db.Helpers.AlertDialogFragment;
 import com.dvb.movie_db.Models.MovieDetails;
@@ -87,7 +88,7 @@ public class MovieReviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setTitle(mMovieDetails.getOriginal_title());
+
         setContentView(R.layout.review_main_movie);
         ButterKnife.inject(this);
 
@@ -107,18 +108,18 @@ public class MovieReviewActivity extends AppCompatActivity {
         myRecyclerView.setAdapter(myAdapter);
 
 
-        String apiKey = "?api_key=957c988676c0d274a6d1cc76dd5c8a93";
         String siteUrl = "https://api.themoviedb.org/3/movie/";
         String REVIEWS = "/reviews";
         String VIDEOS = "/videos";
+
 
         int movieID = getIntent()
                 .getExtras()
                 .getInt("MOVIE_ID");
 
-        String url = siteUrl + movieID + apiKey;
-        String videoURL = siteUrl + movieID + VIDEOS + apiKey;
-        String reviewsULR = siteUrl + movieID + REVIEWS + apiKey;
+        String url = siteUrl + movieID + BuildConfig.MDB_API_KEY;
+        String videoURL = siteUrl + movieID + VIDEOS + BuildConfig.MDB_API_KEY;
+        String reviewsULR = siteUrl + movieID + REVIEWS + BuildConfig.MDB_API_KEY;
 
 
         makeHttpRequest(url, new MoviesRequestInterface() {
@@ -319,8 +320,6 @@ public class MovieReviewActivity extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
     }
 
-
-//    sending intent to watch Trailer on Youtube
 
 }
 

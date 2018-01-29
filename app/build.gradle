@@ -1,5 +1,8 @@
 apply plugin: 'com.android.application'
 
+def MDB_API_KEY = '"MDB_API_key"';
+
+
 android {
     compileSdkVersion 26
     buildToolsVersion "26.0.0"
@@ -11,11 +14,16 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+
+    buildTypes.each {
+        it.buildConfigField 'String', 'MDB_API_KEY', MDB_API_KEY
     }
 }
 
@@ -32,6 +40,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.squareup.okhttp:okhttp:2.1.0'
     compile 'com.jakewharton:butterknife:6.0.0'
+
 
 
 }
